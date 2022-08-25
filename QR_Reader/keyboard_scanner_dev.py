@@ -60,10 +60,11 @@ class Keylogger:
         
 
 
-        print(f'my name is {self.log}')
+        #print(f'my name is {self.log}')
 
-        # testport = self.log
-        # print(testport)
+
+    # testport = self.log
+    # print(testport)
 
     
    
@@ -132,12 +133,47 @@ class Keylogger:
                 # if you don't want to print in the console, comment below line
                 print(f"[{self.filename}] - {self.log}")
             self.start_dt = datetime.now()
+        
+        ###log to SQL###
+
+
+        ###clear log###
         self.log = ""
         timer = Timer(interval=self.interval, function=self.report)
         # set the thread as daemon (dies when main thread die)
         timer.daemon = True
         # start the timer
         timer.start()
+
+    def log_sql(self):
+        self.log_sql(self.log)
+        string = self.log
+        stringSplit = string.split(",")
+
+        printerID = 'SP1'
+        dateofmanufacture = stringSplit[0]
+        serialNumber = stringSplit[1]
+        prodFam = stringSplit[2]
+        currentDate = datetime.now()
+
+        testData = StringIO(string)
+
+        dict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'SerialNumber': serialNumber, 'ProductFamily': prodFam, 'CurrentDate': currentDate}
+
+        df = pd.DataFrame.from_dict(dict, orient='index')
+        df = df.transpose()
+
+        #SQL Connection Windows Authentication#
+
+        Server = 'UKC-VM-SQL01'
+        Database = 'Stencil'
+        Driver = 'ODBC Driver 17 for SQL Server'
+        Database_con = f'mssql://@{Server}/{Database}?driver={Driver}'
+
+        engine = create_engine(Database_con)
+        con = engine.connect()
+
+        df.to_sql('StencilUsage', con, if_exists='append', index = False)
 
     def start(self):
         # record the start datetime
