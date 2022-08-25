@@ -136,6 +136,8 @@ class Keylogger:
         
         ###log to SQL###
 
+        if self.log != "":
+            self.log_sql()
 
         ###clear log###
         self.log = ""
@@ -146,7 +148,7 @@ class Keylogger:
         timer.start()
 
     def log_sql(self):
-        self.log_sql(self.log)
+        
         string = self.log
         stringSplit = string.split(",")
 
@@ -174,6 +176,7 @@ class Keylogger:
         con = engine.connect()
 
         df.to_sql('StencilUsage', con, if_exists='append', index = False)
+        print('logged to SQL')
 
     def start(self):
         # record the start datetime
