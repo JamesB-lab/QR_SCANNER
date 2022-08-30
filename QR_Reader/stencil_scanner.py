@@ -1,4 +1,4 @@
-import keyboard # for keylogs
+import keyboard
 from threading import Timer
 from datetime import datetime
 from math import prod
@@ -11,7 +11,7 @@ from sqlalchemy import create_engine
 SEND_REPORT_EVERY = 3 # in seconds
 
 
-class Keylogger:
+class Scanner:
     def __init__(self, interval, report_method="file"):
         self.interval = interval
         self.report_method = report_method
@@ -59,14 +59,14 @@ class Keylogger:
         # construct the filename to be identified by start & end datetimes
         start_dt_str = str(self.start_dt)[:-7].replace(" ", "-").replace(":", "")
         end_dt_str = str(self.end_dt)[:-7].replace(" ", "-").replace(":", "")
-        self.filename = f"keylog-{start_dt_str}_{end_dt_str}"
+        self.filename = f"Stencil_QR_Scanner-{start_dt_str}_{end_dt_str}"
 
     def report_to_file(self):
         """This method creates a log file in the current directory that contains
-        the current keylogs in the `self.log` variable"""
+        the current scanner logs in the `self.log` variable"""
         # open the file in write mode (create it)
         with open(f"{self.filename}.txt", "w") as f:
-            # write the keylogs to the file
+            # write the scan logs to the file
             print(self.log, file=f)
         print(f"[+] Saved {self.filename}.txt")
 
@@ -78,7 +78,7 @@ class Keylogger:
     def report(self):
         """
         This function gets called every `self.interval`
-        It basically sends keylogs and resets `self.log` variable
+        It  sends scanner logs and resets `self.log` variable
         """
         if self.log:
             # if there is something in log, report it
@@ -94,9 +94,7 @@ class Keylogger:
         ###log to SQL###
 
         if self.log != "" and len(self.log) ==58:
-            self.log_sql()
-            
-                
+            self.log_sql()  
 
 
         ###clear log###
@@ -121,7 +119,6 @@ class Keylogger:
         material = stringSplit[3]
         thickness = stringSplit[5]
 
-        testData = StringIO(string)
 
         dict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'SerialNumber': serialNumber, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
 
@@ -146,16 +143,15 @@ class Keylogger:
     def start(self):
         # record the start datetime
         self.start_dt = datetime.now()
-        # start the keylogger
+        # start the scanner
         keyboard.on_release(callback=self.callback)
-        # start reporting the keylogs
+        # start reporting the scanner input
         self.report()
-        # make a simple message
         print(f"{datetime.now()} - Started QR Scanner")
         # block the current thread, wait until CTRL+C is pressed
         keyboard.wait()
 
     
 if __name__ == "__main__":
-    keylogger = Keylogger(interval=SEND_REPORT_EVERY, report_method="file")
-    keylogger.start()
+    scanner = Scanner(interval=SEND_REPORT_EVERY, report_method="file")
+    scanner.start()
