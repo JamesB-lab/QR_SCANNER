@@ -1,9 +1,8 @@
+from sqlite3 import InterfaceError
 import keyboard
 from threading import Timer
 from datetime import datetime
-from math import prod
 import pandas as pd
-from io import StringIO
 from datetime import datetime
 from sqlalchemy import create_engine
 
@@ -30,13 +29,11 @@ class Scanner:
         name = event.name
         
         if len(name) > 1:
-            # not a character, special key (e.g ctrl, alt, etc.)
-            # uppercase with []
+            #Not a character, special key (e.g ctrl, alt, etc.)
+            #Uppercase with []
             if name == "space":
-                # " " instead of "spac2017-07-12,395R1,ZL70642MJXe"
                 name = " "
             elif name == "enter":
-                # add a new line whenever an ENTER is pressed
                 name = "[ENTER]\n"
             elif name == "decimal":
                 name = "."
@@ -48,7 +45,7 @@ class Scanner:
                 # replace spaces with underscores
                 name = name.replace(" ", "_")
                 name = f"[{name.upper()}]"
-        # finally, add the key name to our global `self.log` variable
+        #Add the key name to our global `self.log` variable
         name = name.upper()
         self.log += name
         
@@ -104,40 +101,43 @@ class Scanner:
         timer.daemon = True
         # start the timer
         timer.start()
+    try:
+        def log_sql(self):
+            
+            string = self.log
+            stringSplit = string.split(",")
 
-    def log_sql(self):
+            printerID = 'SP2'
+            dateofmanufacture = stringSplit[0]
+            serialNumber = stringSplit[1]
+            prodFam = stringSplit[2]
+            currentDate = datetime.now()
+            manuSN = stringSplit[4]
+            material = stringSplit[3]
+            thickness = stringSplit[5]
+
+
+            dict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'SerialNumber': serialNumber, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
+
+            df = pd.DataFrame.from_dict(dict, orient='index')
+            df = df.transpose()
+
+            #SQL Connection Windows Authentication#
+
+            Server = 'UKC-VM-SQL01'
+            Database = 'Stencil'
+            Driver = 'ODBC Driver 17 for SQL Server'
+            Database_con = f'mssql://@{Server}/{Database}?driver={Driver}'
+
+            engine = create_engine(Database_con)
+            con = engine.connect()
+
+            
+            df.to_sql('StencilUsage', con, if_exists='append', index = False)
+            print('LOGGED TO SQL')
         
-        string = self.log
-        stringSplit = string.split(",")
-
-        printerID = 'SP2'
-        dateofmanufacture = stringSplit[0]
-        serialNumber = stringSplit[1]
-        prodFam = stringSplit[2]
-        currentDate = datetime.now()
-        manuSN = stringSplit[4]
-        material = stringSplit[3]
-        thickness = stringSplit[5]
-
-
-        dict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'SerialNumber': serialNumber, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
-
-        df = pd.DataFrame.from_dict(dict, orient='index')
-        df = df.transpose()
-
-        #SQL Connection Windows Authentication#
-
-        Server = 'UKC-VM-SQL01'
-        Database = 'Stencil'
-        Driver = 'ODBC Driver 17 for SQL Server'
-        Database_con = f'mssql://@{Server}/{Database}?driver={Driver}'
-
-        engine = create_engine(Database_con)
-        con = engine.connect()
-
-        
-        df.to_sql('StencilUsage', con, if_exists='append', index = False)
-        print('LOGGED TO SQL')
+    except(InterfaceError):
+        print('ERROR CONNECTING TO SQL, PLEASE REBOOT SYSTEM')
         
 
     def start(self):
