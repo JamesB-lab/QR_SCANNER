@@ -28,7 +28,7 @@ class Keylogger:
         (i.e when a key is released in this example)
         """
         name = event.name
-        print(f'device={event.device}')
+        
         if len(name) > 1:
             # not a character, special key (e.g ctrl, alt, etc.)
             # uppercase with []
@@ -70,6 +70,9 @@ class Keylogger:
             print(self.log, file=f)
         print(f"[+] Saved {self.filename}.txt")
 
+        if len(self.filename) != 58:
+            print('ERROR LOGGING TO SQL, PLEASE TRY AGAIN')
+
 
 
     def report(self):
@@ -82,9 +85,7 @@ class Keylogger:
             self.end_dt = datetime.now()
             # update `self.filename`
             self.update_filename()
-            if self.report_method == "email":
-                self.sendmail(EMAIL_ADDRESS, EMAIL_PASSWORD, self.log)
-            elif self.report_method == "file":
+            if self.report_method == "file":
                 self.report_to_file()
                 # if you don't want to print in the console, comment below line
                 print(f"[{self.filename}] - {self.log}")
@@ -94,6 +95,9 @@ class Keylogger:
 
         if self.log != "" and len(self.log) ==58:
             self.log_sql()
+            
+                
+
 
         ###clear log###
         self.log = ""
@@ -108,15 +112,18 @@ class Keylogger:
         string = self.log
         stringSplit = string.split(",")
 
-        printerID = 'SP1'
+        printerID = 'SP2'
         dateofmanufacture = stringSplit[0]
         serialNumber = stringSplit[1]
         prodFam = stringSplit[2]
         currentDate = datetime.now()
+        manuSN = stringSplit[4]
+        material = stringSplit[3]
+        thickness = stringSplit[5]
 
         testData = StringIO(string)
 
-        dict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'SerialNumber': serialNumber, 'ProductFamily': prodFam, 'CurrentDate': currentDate}
+        dict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'SerialNumber': serialNumber, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
 
         df = pd.DataFrame.from_dict(dict, orient='index')
         df = df.transpose()
@@ -131,8 +138,10 @@ class Keylogger:
         engine = create_engine(Database_con)
         con = engine.connect()
 
+        
         df.to_sql('StencilUsage', con, if_exists='append', index = False)
-        print('logged to SQL')
+        print('LOGGED TO SQL')
+        
 
     def start(self):
         # record the start datetime
