@@ -83,7 +83,7 @@ class Scanner:
             # update `self.filename`
             self.update_filename()
             if self.report_method == "file":
-                self.report_to_file()
+                #self.report_to_file()
                 # if you don't want to print in the console, comment below line
                 print(f"[{self.filename}] - Logging...")
             self.start_dt = datetime.now()
@@ -106,7 +106,7 @@ class Scanner:
             string = self.log
             stringSplit = string.split(",")
 
-            print(len(string))
+            #print(len(string))
 
             printerID = 'SP2'
             dateofmanufacture = stringSplit[0]
