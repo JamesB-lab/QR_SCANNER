@@ -48,6 +48,8 @@ class Scanner:
         #Add the key name to our global `self.log` variable
         name = name.upper()
         self.log += name
+
+    
         
 
    
@@ -58,19 +60,17 @@ class Scanner:
         end_dt_str = str(self.end_dt)[:-7].replace(" ", "-").replace(":", "")
         self.filename = f"Stencil_QR_Scanner-{start_dt_str}_{end_dt_str}"
 
+
     def report_to_file(self):
         """This method creates a log file in the current directory that contains
         the current scanner logs in the `self.log` variable"""
         # open the file in write mode (create it)
+        
         with open(f"{self.filename}.txt", "w") as f:
             # write the scan logs to the file
             print(self.log, file=f)
         print(f"[+] Saved {self.filename}.txt")
-
-        if len(self.filename) != 58:
-            print('ERROR LOGGING TO SQL, PLEASE TRY AGAIN')
-
-
+    
 
     def report(self):
         """
@@ -85,14 +85,13 @@ class Scanner:
             if self.report_method == "file":
                 self.report_to_file()
                 # if you don't want to print in the console, comment below line
-                print(f"[{self.filename}] - {self.log}")
+                print(f"[{self.filename}] - Logging...")
             self.start_dt = datetime.now()
         
         ###log to SQL###
 
         if self.log != "" and len(self.log) ==58:
             self.log_sql()  
-
 
         ###clear log###
         self.log = ""
@@ -106,6 +105,8 @@ class Scanner:
             
             string = self.log
             stringSplit = string.split(",")
+
+            print(len(string))
 
             printerID = 'SP2'
             dateofmanufacture = stringSplit[0]
@@ -132,9 +133,10 @@ class Scanner:
             engine = create_engine(Database_con)
             con = engine.connect()
 
-            
+
             df.to_sql('StencilUsage', con, if_exists='append', index = False)
             print('LOGGED TO SQL')
+
         
     except(InterfaceError):
         print('ERROR CONNECTING TO SQL, PLEASE REBOOT SYSTEM')

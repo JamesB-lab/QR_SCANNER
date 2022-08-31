@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['\\C:\\vs_code\\QR_Scanner\\QR_Reader\\stencil_scanner.py'],
+    ['stencil_scanner.py'],
     pathex=[],
     binaries=[],
     datas=[],
