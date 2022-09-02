@@ -149,7 +149,7 @@ class Scanner:
         keyboard.on_release(callback=self.callback)
         # start reporting the scanner input
         self.report()
-        print(f"{datetime.now()} - Started QR Scanner")
+        print(f"{datetime.now()} - Started QR Scanner for SP2")
         # block the current thread, wait until CTRL+C is pressed
         keyboard.wait()
 
