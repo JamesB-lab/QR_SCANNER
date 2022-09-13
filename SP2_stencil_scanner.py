@@ -85,7 +85,7 @@ class Scanner:
             if self.report_method == "file":
                 #self.report_to_file()
                 # if you don't want to print in the console, comment below line
-                print(f"[{self.filename}] - Logging...")
+                print(f"[{self.filename}] - Waiting for Input...")
             self.start_dt = datetime.now()
         
         ###log to SQL###

