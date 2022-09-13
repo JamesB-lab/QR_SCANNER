@@ -139,7 +139,7 @@ class Scanner:
             print(f'LOGGED TO SQL at {datetime.now()}')
 
         
-        except(InterfaceError):
+        except:
             print('ERROR CONNECTING TO SQL, PLEASE REBOOT SYSTEM')
         
 

@@ -100,8 +100,8 @@ class Scanner:
         timer.daemon = True
         # start the timer
         timer.start()
-    try:
-        def log_sql(self):
+    def log_sql(self):
+        try:
             
             string = self.log
             stringSplit = string.split(",")
@@ -138,8 +138,8 @@ class Scanner:
             print(f'LOGGED TO SQL at {datetime.now()}')
 
         
-    except(InterfaceError):
-        print('ERROR CONNECTING TO SQL, PLEASE REBOOT SYSTEM')
+        except:
+            print('ERROR CONNECTING TO SQL, PLEASE REBOOT SYSTEM')
         
 
     def start(self):
