@@ -90,7 +90,7 @@ class Scanner:
         
         ###log to SQL###
 
-        if self.log != "" and len(self.log) ==58:
+        if self.log != "" and len(self.log) ==59:
             self.log_sql()  
 
         ###clear log###
