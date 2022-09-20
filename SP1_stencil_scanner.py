@@ -103,25 +103,27 @@ class Scanner:
     
     def log_sql(self):
         try:
-            
-            string = self.log
-            stringSplit = string.split(",")
+            scannedString = self.log
+            stringSplit = scannedString.split(",")
 
             #print(len(string))
 
+            #2017-07-12,395,R1,ZL70642MJX,STAINLESS_STEEL,GB031958,0.005
+
             printerID = 'SP1'
             dateofmanufacture = stringSplit[0]
-            serialNumber = stringSplit[1]
-            prodFam = stringSplit[2]
+            stencilNumber = stringSplit[1]
+            revision = stringSplit[2]
+            prodFam = stringSplit[3]
             currentDate = datetime.now()
-            manuSN = stringSplit[4]
-            material = stringSplit[3]
-            thickness = stringSplit[5]
+            manuSN = stringSplit[5]
+            material = stringSplit[4]
+            thickness = stringSplit[6]
 
 
-            dict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'SerialNumber': serialNumber, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
+            mydict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'StencilNumber': stencilNumber, 'Revision': revision, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
 
-            df = pd.DataFrame.from_dict(dict, orient='index')
+            df = pd.DataFrame.from_dict(mydict, orient='index')
             df = df.transpose()
 
             #SQL Connection Windows Authentication#
@@ -138,8 +140,9 @@ class Scanner:
             df.to_sql('StencilUsage', con, if_exists='append', index = False)
             print(f'LOGGED TO SQL at {datetime.now()}')
 
-        
-        except:
+
+
+        except Exception:
             print('ERROR CONNECTING TO SQL, PLEASE REBOOT SYSTEM')
         
 
