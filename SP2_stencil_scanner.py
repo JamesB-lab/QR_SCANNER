@@ -90,8 +90,7 @@ class Scanner:
         
         ###log to SQL###
 
-        if self.log != "" and len(self.log) ==58:
-            print(f'TEST{self.log}')
+        if self.log != "" and len(self.log) ==59:
             self.log_sql()  
 
         ###clear log###
@@ -101,26 +100,29 @@ class Scanner:
         timer.daemon = True
         # start the timer
         timer.start()
+    
     def log_sql(self):
         try:
-            
-            string = self.log
-            print(String)
-            stringSplit = string.split(",")
+            scannedString = self.log
+            print(scannedString)
+            stringSplit = scannedString.split(",")
 
             #print(len(string))
 
+            #2017-07-12,395,R1,ZL70642MJX,STAINLESS_STEEL,GB031958,0.005
+
             printerID = 'SP2'
             dateofmanufacture = stringSplit[0]
-            serialNumber = stringSplit[1]
-            prodFam = stringSplit[2]
+            stencilNumber = stringSplit[1]
+            revision = stringSplit[2]
+            prodFam = stringSplit[3]
             currentDate = datetime.now()
-            manuSN = stringSplit[4]
-            material = stringSplit[3]
-            thickness = stringSplit[5]
+            manuSN = stringSplit[5]
+            material = stringSplit[4]
+            thickness = stringSplit[6]
 
 
-            mydict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'SerialNumber': serialNumber, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
+            mydict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'StencilNumber': stencilNumber, 'Revision': revision, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
 
             df = pd.DataFrame.from_dict(mydict, orient='index')
             df = df.transpose()
@@ -139,9 +141,10 @@ class Scanner:
             df.to_sql('StencilUsage', con, if_exists='append', index = False)
             print(f'LOGGED TO SQL at {datetime.now()}')
 
-        
-        except:
-            print('ERROR CONNECTING TO SQL, PLEASE REBOOT SYSTEM')
+
+
+        except Exception:
+            print('ERROR CONNECTING TO SQL')
         
 
     def start(self):
@@ -151,7 +154,7 @@ class Scanner:
         keyboard.on_release(callback=self.callback)
         # start reporting the scanner input
         self.report()
-        print(f"{datetime.now()} - Started QR Scanner for SP2")
+        print(f"{datetime.now()} - Started QR Scanner for SP1")
         # block the current thread, wait until CTRL+C is pressed
         keyboard.wait()
 
