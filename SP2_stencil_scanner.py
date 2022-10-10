@@ -91,6 +91,7 @@ class Scanner:
         ###log to SQL###
 
         if self.log != "" and len(self.log) ==58:
+            print(f'TEST{self.log}')
             self.log_sql()  
 
         ###clear log###
@@ -104,6 +105,7 @@ class Scanner:
         try:
             
             string = self.log
+            print(String)
             stringSplit = string.split(",")
 
             #print(len(string))
@@ -118,9 +120,9 @@ class Scanner:
             thickness = stringSplit[5]
 
 
-            dict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'SerialNumber': serialNumber, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
+            mydict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'SerialNumber': serialNumber, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
 
-            df = pd.DataFrame.from_dict(dict, orient='index')
+            df = pd.DataFrame.from_dict(mydict, orient='index')
             df = df.transpose()
 
             #SQL Connection Windows Authentication#

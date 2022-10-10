@@ -104,6 +104,7 @@ class Scanner:
     def log_sql(self):
         try:
             scannedString = self.log
+            print(scannedString)
             stringSplit = scannedString.split(",")
 
             #print(len(string))
@@ -143,7 +144,7 @@ class Scanner:
 
 
         except Exception:
-            print('ERROR CONNECTING TO SQL, PLEASE REBOOT SYSTEM')
+            print('ERROR CONNECTING TO SQL')
         
 
     def start(self):
