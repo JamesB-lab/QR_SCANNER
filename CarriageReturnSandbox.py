@@ -48,6 +48,8 @@ class Scanner:
         #Add the key name to our global `self.log` variable
         name = name.upper()
         self.log += name
+        #print(f'Test_1: {self.log}')
+        print(f'Test_2: {len(self.log)}')
 
     
         
@@ -91,7 +93,11 @@ class Scanner:
         ###log to SQL###
 
         if self.log != "" and len(self.log) ==59:
-            self.log_sql()  
+            print('This is 59') 
+            self.log_sql()
+            print(f'TestyTest = {self.log}')
+        else:
+            print(f'Carriage return error string length = {len(self.log)}')  
 
         ###clear log###
         self.log = ""
@@ -104,14 +110,16 @@ class Scanner:
     def log_sql(self):
         try:
             scannedString = self.log
-            print(scannedString)
             stringSplit = scannedString.split(",")
+            print(stringSplit)
+            #stringSplit = stringSplit.replace("[ENTER]\n", '')
+            print(f'Test remove ENTER {stringSplit}') 
 
-            #print(len(string))
+            print(f'Test_3 {len(scannedString)}')
 
             #2017-07-12,395,R1,ZL70642MJX,STAINLESS_STEEL,GB031958,0.005
 
-            printerID = 'SP2'
+            printerID = 'TTT'
             dateofmanufacture = stringSplit[0]
             stencilNumber = stringSplit[1]
             revision = stringSplit[2]
@@ -120,6 +128,17 @@ class Scanner:
             manuSN = stringSplit[5]
             material = stringSplit[4]
             thickness = stringSplit[6]
+
+            print(f'PrinterID = {printerID}')
+            print(dateofmanufacture)
+            print(stencilNumber)
+            print(revision)
+            print(prodFam)
+            print(currentDate)
+            print(manuSN)
+            print(material)
+            print(thickness)
+
 
 
             mydict = {'PrinterID': printerID, 'DateofManufacture': dateofmanufacture, 'StencilNumber': stencilNumber, 'Revision': revision, 'ProductFamily': prodFam, 'CurrentDate': currentDate, 'ManufacturerSN': manuSN, 'Material': material, 'Thickness': thickness}
@@ -154,7 +173,7 @@ class Scanner:
         keyboard.on_release(callback=self.callback)
         # start reporting the scanner input
         self.report()
-        print(f"{datetime.now()} - Started QR Scanner for SP2")
+        print(f"{datetime.now()} - Carriage return sandbox, do not use in production")
         # block the current thread, wait until CTRL+C is pressed
         keyboard.wait()
 

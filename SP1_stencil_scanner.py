@@ -34,7 +34,7 @@ class Scanner:
             if name == "space":
                 name = " "
             elif name == "enter":
-                name = "[ENTER]\n"
+                name = ""
             elif name == "decimal":
                 name = "."
             elif name == "shift":

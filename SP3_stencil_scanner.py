@@ -34,7 +34,7 @@ class Scanner:
             if name == "space":
                 name = " "
             elif name == "enter":
-                name = "[ENTER]\n"
+                name = ""
             elif name == "decimal":
                 name = "."
             elif name == "shift":
@@ -154,7 +154,7 @@ class Scanner:
         keyboard.on_release(callback=self.callback)
         # start reporting the scanner input
         self.report()
-        print(f"{datetime.now()} - Started QR Scanner for SP1")
+        print(f"{datetime.now()} - Started QR Scanner for SP3")
         # block the current thread, wait until CTRL+C is pressed
         keyboard.wait()
 
